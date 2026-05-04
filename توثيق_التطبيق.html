@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بوابة الحاج — توثيق التطبيق الشامل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Variables ── */
+    :root {
+      --green-dark: #00594F;
+      --green-mid: #016D5D;
+      --green-light: #289E92;
+      --green-pale: #e8f5f3;
+      --gold-dark: #AD9E6E;
+      --gold-mid: #D9C89E;
+      --gold-pale: #f9f5ec;
+      --red-dark: #420023;
+      --red-mid: #672146;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --text-main: #1a202c;
+      --text-muted: #6b7280;
+      --bg-main: #f3f4f6;
+      --bg-card: #ffffff;
+      --border-color: #e5e7eb;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,.13);
+      --nav-h: 60px;
+      --sidebar-w: 230px;
+      --transition: .25s ease;
+    }
+    [data-theme="dark"] {
+      --white: #1e2433;
+      --bg-main: #111827;
+      --bg-card: #1e2433;
+      --border-color: #2d3748;
+      --gray-50: #1e2433;
+      --gray-100: #252f3f;
+      --gray-200: #2d3748;
+      --gray-300: #374151;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --gray-800: #e5e7eb;
+      --green-pale: #0a2320;
+      --gold-pale: #2a2010;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.3);
+      --shadow-md: 0 4px 16px rgba(0,0,0,.35);
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.8;
+      direction: rtl;
+      text-align: right;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* ── Progress Bar ── */
+    #progress-bar {
+      position: fixed;
+      top: 0; right: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(to left, var(--gold-dark), var(--green-light));
+      transform-origin: right;
+      transform: scaleX(0);
+      z-index: 2000;
+      transition: transform .1s linear;
+    }
+
+    /* ── Top Nav ── */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      height: var(--nav-h);
+      background: var(--green-dark);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+    }
+    .top-nav-inner {
+      width: 100%;
+      max-width: 1400px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      gap: 16px;
+    }
+    .nav-brand {
+      color: var(--gold-mid);
+      font-size: 1rem;
+      font-weight: 700;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 30px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,255,255,.18);
+      color: #fff;
+    }
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
+    .btn-theme {
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition);
+    }
+    .btn-theme:hover { background: rgba(255,255,255,.28); }
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* ── Layout Wrapper ── */
+    .layout {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      gap: 0;
+      align-items: start;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: sticky;
+      top: calc(var(--nav-h) + 20px);
+      max-height: calc(100vh - var(--nav-h) - 40px);
+      overflow-y: auto;
+      padding-left: 20px;
+      scrollbar-width: thin;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+    .toc-title {
+      font-size: .7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .toc-list { list-style: none; }
+    .toc-list li { margin-bottom: 2px; }
+    .toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), color var(--transition);
+      border-right: 3px solid transparent;
+    }
+    .toc-list a:hover { background: var(--gray-100); color: var(--text-main); }
+    .toc-list a.active {
+      background: var(--green-pale);
+      color: var(--green-dark);
+      border-right-color: var(--green-mid);
+    }
+    .toc-list a .toc-icon { font-size: 1rem; flex-shrink: 0; }
+    .toc-num {
+      font-size: .65rem;
+      background: var(--gray-200);
+      color: var(--text-muted);
+      border-radius: 20px;
+      padding: 1px 6px;
+      font-weight: 700;
+      margin-right: auto;
+    }
+    .toc-list a.active .toc-num { background: var(--green-light); color: #fff; }
+
+    /* ── Main Content ── */
+    .main-content { min-width: 0; }
+
+    /* ── Section Card ── */
+    .section-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .5s ease, transform .5s ease, box-shadow var(--transition);
+    }
+    .section-card.visible { opacity: 1; transform: translateY(0); }
+    .section-card:hover { box-shadow: var(--shadow-md); }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 28px;
+    }
+    .section-header.green  { background: linear-gradient(135deg, var(--green-dark), var(--green-mid)); }
+    .section-header.gold   { background: linear-gradient(135deg, #7a6030, var(--gold-dark)); }
+    .section-header.red    { background: linear-gradient(135deg, var(--red-dark), var(--red-mid)); }
+    .section-header.teal   { background: linear-gradient(135deg, #005f6e, #0096a8); }
+    .section-header.purple { background: linear-gradient(135deg, #3d1a6e, #6b35b0); }
+    .section-header.blue   { background: linear-gradient(135deg, #132d55, #2550a8); }
+    .section-header.dark   { background: linear-gradient(135deg, #0f172a, #1e293b); }
+
+    .section-header .s-icon-box {
+      font-size: 1.5rem;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.15);
+      border-radius: 12px;
+      flex-shrink: 0;
+      backdrop-filter: blur(4px);
+    }
+    .section-header h2 { color: #fff; font-size: 1.15rem; font-weight: 700; }
+    .section-header p  { color: rgba(255,255,255,.72); font-size: .8rem; margin-top: 2px; }
+    .section-num {
+      margin-right: auto;
+      background: rgba(255,255,255,.18);
+      color: rgba(255,255,255,.8);
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .section-body { padding: 28px; }
+
+    /* ── Sub-headings ── */
+    .sub-heading {
+      color: var(--green-dark);
+      font-size: .95rem;
+      font-weight: 700;
+      margin: 24px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--green-pale);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sub-heading:first-child { margin-top: 0; }
+
+    /* ── Feature Grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--gray-50);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 4px; height: 100%;
+      background: var(--accent, var(--green-mid));
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .feature-card .fc-icon { font-size: 1.7rem; margin-bottom: 10px; display: block; }
+    .feature-card h3 { font-size: .92rem; font-weight: 700; color: var(--green-dark); margin-bottom: 6px; }
+    .feature-card p  { font-size: .82rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── Screens Grid ── */
+    .screens-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .screen-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--green-pale);
+      border: 1px solid #c3e4df;
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      transition: transform var(--transition);
+    }
+    .screen-item:hover { transform: translateY(-2px); }
+    .screen-item .s-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .screen-item h4 { font-size: .88rem; font-weight: 700; color: var(--green-dark); }
+    .screen-item p  { font-size: .75rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── Tables ── */
+    .info-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .info-table th {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 11px 16px;
+      font-weight: 700;
+      text-align: right;
+    }
+    .info-table th:first-child { border-radius: 0 8px 0 0; }
+    .info-table th:last-child  { border-radius: 8px 0 0 0; }
+    .info-table td { padding: 10px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-main); vertical-align: top; }
+    .info-table tr:nth-child(even) td { background: var(--gray-50); }
+    .info-table tr:hover td { background: var(--green-pale); }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: .7rem;
+      font-weight: 700;
+    }
+    .badge-green  { background: #d1fae5; color: #065f46; }
+    .badge-blue   { background: #dbeafe; color: #1e40af; }
+    .badge-gold   { background: #fef3c7; color: #92400e; }
+    .badge-red    { background: #fee2e2; color: #991b1b; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+    /* ── Pills ── */
+    .info-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 5px 14px;
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+    .pill .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green-light);
+      flex-shrink: 0;
+    }
+
+    /* ── Timeline ── */
+    .timeline { position: relative; padding-right: 26px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      right: 8px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--green-light), var(--gold-dark));
+    }
+    .tl-item { position: relative; margin-bottom: 22px; }
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      right: -20px; top: 6px;
+      width: 13px; height: 13px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      border: 2px solid var(--bg-card);
+      box-shadow: 0 0 0 3px var(--green-light);
+    }
+    .tl-item h4 { font-size: .9rem; font-weight: 700; color: var(--green-dark); }
+    .tl-item p  { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── Architecture Layers ── */
+    .arch-layer { border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; }
+    .arch-layer-head { display: flex; align-items: center; gap: 10px; padding: 11px 16px; font-weight: 700; font-size: .88rem; }
+    .arch-layer-body { padding: 14px 16px; background: var(--gray-50); font-size: .82rem; color: var(--text-muted); line-height: 1.9; }
+    .arch-layer.l-presentation .arch-layer-head { background: #e0f2f1; color: #004d40; }
+    .arch-layer.l-domain       .arch-layer-head { background: #fff3e0; color: #e65100; }
+    .arch-layer.l-data         .arch-layer-head { background: #e8eaf6; color: #283593; }
+    [data-theme="dark"] .arch-layer.l-presentation .arch-layer-head { background: #0a2320; color: #4db6ac; }
+    [data-theme="dark"] .arch-layer.l-domain       .arch-layer-head { background: #2a1500; color: #ffb74d; }
+    [data-theme="dark"] .arch-layer.l-data         .arch-layer-head { background: #1a1c3a; color: #9fa8da; }
+
+    /* ── Callouts ── */
+    .callout {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+    .callout-info    { background: #eff6ff; border-right: 4px solid #3b82f6; }
+    .callout-warn    { background: #fffbeb; border-right: 4px solid #f59e0b; }
+    .callout-success { background: #f0fdf4; border-right: 4px solid #22c55e; }
+    [data-theme="dark"] .callout-info    { background: #0f172a; }
+    [data-theme="dark"] .callout-warn    { background: #1a1200; }
+    [data-theme="dark"] .callout-success { background: #051a0a; }
+    .callout .c-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .callout p       { font-size: .84rem; color: var(--text-main); line-height: 1.7; }
+    .callout strong  { font-weight: 700; display: block; margin-bottom: 2px; }
+
+    /* ── Color Palette ── */
+    .color-palette { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; }
+    .color-swatch  { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .swatch-box    { width: 60px; height: 60px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border: 1px solid rgba(0,0,0,.08); }
+    .swatch-label  { font-size: .68rem; color: var(--text-muted); font-weight: 600; text-align: center; }
+
+    /* ── Stats Grid ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+    }
+    .stat-box {
+      text-align: center;
+      padding: 20px 12px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+      color: #fff;
+      transition: transform var(--transition);
+    }
+    .stat-box:hover { transform: scale(1.04); }
+    .stat-box .num { display: block; font-size: 2rem; font-weight: 900; color: var(--gold-mid); line-height: 1.1; }
+    .stat-box .lbl { font-size: .76rem; opacity: .8; margin-top: 4px; }
+
+    /* ── Code Block ── */
+    .code-block {
+      background: #0d1117;
+      color: #a8d1a0;
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: .8rem;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      line-height: 1.7;
+      border: 1px solid #30363d;
+    }
+    .code-block .comment { color: #6a737d; }
+    .code-block .key { color: #79b8ff; }
+    .code-block .val { color: #f97583; }
+
+    /* ── Language Cards ── */
+    .lang-card {
+      text-align: center;
+      padding: 22px 14px;
+      border-radius: var(--radius-md);
+      color: #fff;
+      transition: transform var(--transition);
+    }
+    .lang-card:hover { transform: translateY(-4px); }
+    .lang-card .flag { font-size: 2.4rem; margin-bottom: 8px; }
+    .lang-card .lang-name { font-size: 1rem; font-weight: 700; }
+    .lang-card .lang-sub  { font-size: .72rem; opacity: .75; margin-top: 4px; }
+    .lang-card .lang-size { font-size: .68rem; opacity: .6; margin-top: 4px; }
+
+    /* ── Unique Feature Cards ── */
+    .unique-card {
+      border-radius: var(--radius-md);
+      padding: 22px;
+      border: 1px solid var(--border-color);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .unique-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .unique-card .uc-icon { font-size: 2rem; margin-bottom: 10px; }
+    .unique-card h3 { font-size: .95rem; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; }
+    .unique-card p  { font-size: .82rem; color: var(--text-muted); line-height: 1.8; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(145deg, var(--green-dark) 0%, var(--green-mid) 50%, var(--green-light) 100%);
+      color: #fff;
+      padding: 80px 28px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.3);
+      color: var(--gold-mid);
+      font-size: .78rem;
+      font-weight: 700;
+      padding: 5px 18px;
+      border-radius: 30px;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .arabic-divider { text-align: center; color: var(--gold-dark); font-size: 1.4rem; margin: 10px 0; letter-spacing: 4px; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; line-height: 1.2; margin-bottom: 14px; }
+    .hero h1 span { color: var(--gold-mid); }
+    .hero-sub { font-size: 1.05rem; opacity: .85; max-width: 680px; margin: 0 auto 28px; }
+    .hero-stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-top: 36px; }
+    .hero-stat .num { display: block; font-size: 1.9rem; font-weight: 900; color: var(--gold-mid); }
+    .hero-stat .lbl { font-size: .76rem; opacity: .75; font-weight: 600; }
+
+    /* ── Divider ── */
+    .section-divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--text-muted); font-size: .75rem; font-weight: 600;
+      margin: 8px 0 20px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border-color);
+    }
+
+    /* ── Two-column grid ── */
+    .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .col-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .col-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    /* ── Back to Top ── */
+    #back-to-top {
+      position: fixed;
+      bottom: 28px;
+      left: 28px;
+      width: 44px; height: 44px;
+      background: var(--green-dark);
+      color: var(--gold-mid);
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity var(--transition), transform var(--transition);
+      z-index: 500;
+    }
+    #back-to-top.visible { opacity: 1; transform: translateY(0); }
+    #back-to-top:hover { background: var(--green-mid); }
+
+    /* ── Footer ── */
+    .page-footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 36px 24px;
+      font-size: .82rem;
+      line-height: 2;
+    }
+    .page-footer strong { color: var(--gold-mid); }
+
+    /* ── Font boxes ── */
+    .font-box {
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; padding: 20px 16px 60px; }
+      .sidebar { display: none; }
+      .sidebar.open {
+        display: block;
+        position: fixed;
+        top: var(--nav-h); right: 0; bottom: 0;
+        width: 260px;
+        background: var(--bg-card);
+        box-shadow: var(--shadow-lg);
+        padding: 20px;
+        z-index: 800;
+        overflow-y: auto;
+      }
+      .hamburger { display: flex; }
+      .nav-links { display: none; }
+      .col-2, .col-3, .col-4 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .hero-stats { gap: 18px; }
+      .section-body { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- ── Nav ── -->
+<nav class="top-nav">
+  <div class="top-nav-inner">
+    <span class="nav-brand">🕌 بوابة الحاج</span>
+    <ul class="nav-links">
+      <li><a href="#overview">نظرة عامة</a></li>
+      <li><a href="#screens">الشاشات</a></li>
+      <li><a href="#features">الميزات</a></li>
+      <li><a href="#architecture">البنية</a></li>
+      <li><a href="#tech">التقنيات</a></li>
+      <li><a href="#services">الخدمات</a></li>
+      <li><a href="#ui">الواجهة</a></li>
+      <li><a href="#localization">اللغات</a></li>
+      <li><a href="#unique">المميزات</a></li>
+      <li><a href="#stats">الإحصاء</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-theme" id="theme-toggle" title="تبديل المظهر">🌙</button>
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-badge">الإصدار 1.0.0 — بناء 6</div>
+  <div class="arabic-divider">﷽</div>
+  <h1>تطبيق <span>بوابة الحاج</span></h1>
+  <p class="hero-sub">
+    دليلك الرقمي الشامل لرحلة الحج والعمرة — تطبيق متكامل يجمع بين الخدمات الدينية،
+    إدارة الشكاوى، التقييمات التدريبية، وأدوات المساعدة الميدانية في منصة واحدة.
+  </p>
+  <div class="arabic-divider">✦ ✦ ✦</div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="num">24</span><span class="lbl">شاشة تفاعلية</span></div>
+    <div class="hero-stat"><span class="num">23</span><span class="lbl">وحدة مستقلة</span></div>
+    <div class="hero-stat"><span class="num">14</span><span class="lbl">خدمة متكاملة</span></div>
+    <div class="hero-stat"><span class="num">4</span><span class="lbl">لغات مدعومة</span></div>
+    <div class="hero-stat"><span class="num">379+</span><span class="lbl">ملف برمجي</span></div>
+    <div class="hero-stat"><span class="num">30+</span><span class="lbl">مكتبة خارجية</span></div>
+  </div>
+</section>
+
+<!-- ── Layout ── -->
+<div class="layout">
+
+  <!-- Sidebar TOC -->
+  <aside class="sidebar" id="sidebar">
+    <div class="toc-title">محتويات التوثيق</div>
+    <ul class="toc-list">
+      <li><a href="#overview"      class="toc-link"><span class="toc-icon">🕌</span> نظرة عامة     <span class="toc-num">1</span></a></li>
+      <li><a href="#screens"       class="toc-link"><span class="toc-icon">📱</span> الشاشات       <span class="toc-num">2</span></a></li>
+      <li><a href="#features"      class="toc-link"><span class="toc-icon">⭐</span> الميزات       <span class="toc-num">3</span></a></li>
+      <li><a href="#architecture"  class="toc-link"><span class="toc-icon">🏗️</span> البنية         <span class="toc-num">4</span></a></li>
+      <li><a href="#tech"          class="toc-link"><span class="toc-icon">⚙️</span> التقنيات      <span class="toc-num">5</span></a></li>
+      <li><a href="#services"      class="toc-link"><span class="toc-icon">🔧</span> الخدمات       <span class="toc-num">6</span></a></li>
+      <li><a href="#ui"            class="toc-link"><span class="toc-icon">🎨</span> الواجهة       <span class="toc-num">7</span></a></li>
+      <li><a href="#localization"  class="toc-link"><span class="toc-icon">🌍</span> اللغات        <span class="toc-num">8</span></a></li>
+      <li><a href="#unique"        class="toc-link"><span class="toc-icon">💎</span> المميزات      <span class="toc-num">9</span></a></li>
+      <li><a href="#stats"         class="toc-link"><span class="toc-icon">📊</span> الإحصاء      <span class="toc-num">10</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content">
+
+    <!-- 1 Overview -->
+    <div id="overview" class="section-card">
+      <div class="section-header green">
+        <div class="s-icon-box">🕌</div>
+        <div>
+          <h2>نظرة عامة على التطبيق</h2>
+          <p>هوية المشروع ومنصة التطوير والمعلومات الأساسية</p>
+        </div>
+        <span class="section-num"> 1</span>
+      </div>
+      <div class="section-body">
+        <div class="col-2" style="margin-bottom:24px;">
+          <table class="info-table">
+            <tr><th colspan="2">معلومات المشروع</th></tr>
+            <tr><td><strong>اسم التطبيق</strong></td><td>بوابة الحاج <small style="color:var(--text-muted)">— bawabatelhajj</small></td></tr>
+            <tr><td><strong>الإصدار</strong></td><td><span class="badge badge-green">1.0.0 (Build 6)</span></td></tr>
+            <tr><td><strong>إطار العمل</strong></td><td>Flutter SDK ^3.11.4</td></tr>
+            <tr><td><strong>لغة البرمجة</strong></td><td>Dart</td></tr>
+            <tr><td><strong>الاستهداف</strong></td><td>iOS 15+ &amp; Android</td></tr>
+            <tr><td><strong>الخادم</strong></td><td>Azure Cloud (hajjmobileapi)</td></tr>
+            <tr><td><strong>قاعدة البيانات</strong></td><td>Firebase (Firestore + FCM)</td></tr>
+            <tr><td><strong>التحديث التلقائي</strong></td><td><span class="badge badge-blue">Shorebird OTA</span></td></tr>
+          </table>
+          <table class="info-table">
+            <tr><th colspan="2">نمط البرمجة</th></tr>
+            <tr><td><strong>المعمارية</strong></td><td>Clean Architecture</td></tr>
+            <tr><td><strong>إدارة الحالة</strong></td><td>Flutter BLoC / Cubit</td></tr>
+            <tr><td><strong>حقن التبعيات</strong></td><td>GetIt (Service Locator)</td></tr>
+            <tr><td><strong>التوجيه</strong></td><td>GoRouter</td></tr>
+            <tr><td><strong>الشبكة</strong></td><td>Dio HTTP Client</td></tr>
+            <tr><td><strong>نمط البيانات</strong></td><td>Repository Pattern</td></tr>
+            <tr><td><strong>التخزين المؤقت</strong></td><td>Offline-First Caching</td></tr>
+            <tr><td><strong>التصميم</strong></td><td>Material Design 3</td></tr>
+          </table>
+        </div>
+        <div class="callout callout-success">
+          <span class="c-icon">✅</span>
+          <p>
+            <strong>تطبيق على مستوى المؤسسات</strong>
+            يُعدّ هذا التطبيق احترافياً متكامل البنية، يتبع مبادئ Clean Architecture مع فصل واضح بين طبقات العرض والمنطق والبيانات، مما يجعله قابلاً للتوسع والصيانة على المدى الطويل.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 Screens -->
+    <div id="screens" class="section-card">
+      <div class="section-header teal">
+        <div class="s-icon-box">📱</div>
+        <div>
+          <h2>شاشات وصفحات التطبيق</h2>
+          <p>24 شاشة تفاعلية موزعة على محاور التطبيق الرئيسية</p>
+        </div>
+        <span class="section-num"> 2</span>
+      </div>
+      <div class="section-body">
+
+        <div class="section-divider">🔐 شاشات المصادقة</div>
+        <div class="screens-list">
+          <div class="screen-item"><span class="s-icon">🔑</span><div><h4>تسجيل الدخول</h4><p>دخول المستخدم بالبريد وكلمة المرور مع دعم تحديث الرمز تلقائياً</p></div></div>
+          <div class="screen-item"><span class="s-icon">📝</span><div><h4>إنشاء حساب</h4><p>تسجيل مستخدم جديد مع التحقق من البريد الإلكتروني ورقم الهوية السعودية</p></div></div>
+          <div class="screen-item"><span class="s-icon">🔒</span><div><h4>نسيت كلمة المرور</h4><p>إعادة تعيين كلمة المرور عبر البريد الإلكتروني</p></div></div>
+        </div>
+
+        <div class="section-divider">🏠 الشاشات الأساسية</div>
+        <div class="screens-list">
+          <div class="screen-item"><span class="s-icon">✨</span><div><h4>شاشة البداية (Splash)</h4><p>الشاشة الافتراضية عند فتح التطبيق مع التهيئة الأولية</p></div></div>
+          <div class="screen-item"><span class="s-icon">🏡</span><div><h4>الرئيسية</h4><p>لوحة تحكم شاملة مع الوصول السريع لجميع الميزات</p></div></div>
+          <div class="screen-item"><span class="s-icon">👤</span><div><h4>الملف الشخصي</h4><p>بيانات المستخدم وإدارة الحساب وخيار الحذف</p></div></div>
+          <div class="screen-item"><span class="s-icon">🔔</span><div><h4>الإشعارات</h4><p>مركز الإشعارات مع عداد غير المقروء وإدارة التفضيلات</p></div></div>
+        </div>
+
+        <div class="section-divider">📋 الشكاوى والتقييمات</div>
+        <div class="screens-list">
+          <div class="screen-item"><span class="s-icon">📋</span><div><h4>قائمة الشكاوى</h4><p>عرض جميع شكاوى المستخدم مع حالتها ومعلوماتها</p></div></div>
+          <div class="screen-item"><span class="s-icon">➕</span><div><h4>رفع شكوى جديدة</h4><p>نموذج تفصيلي مع إمكانية إرفاق الملفات والصور</p></div></div>
+          <div class="screen-item"><span class="s-icon">🔍</span><div><h4>تفاصيل الشكوى</h4><p>عرض تفصيلي لحالة الشكوى وتاريخها ومراحل المعالجة</p></div></div>
+          <div class="screen-item"><span class="s-icon">📊</span><div><h4>قائمة التقييمات</h4><p>التقييمات التدريبية المرحلية للحاج</p></div></div>
+          <div class="screen-item"><span class="s-icon">📈</span><div><h4>تفاصيل التقييم</h4><p>أسئلة المرحلة التدريبية وتتبع التقدم</p></div></div>
+          <div class="screen-item"><span class="s-icon">🎓</span><div><h4>التدريب</h4><p>المراحل التدريبية المنظمة مع تتبع الإنجاز</p></div></div>
+        </div>
+
+        <div class="section-divider">☪️ الشاشات الدينية والإرشادية</div>
+        <div class="screens-list">
+          <div class="screen-item"><span class="s-icon">📖</span><div><h4>دليل الحاج</h4><p>إرشادات الحج خطوة بخطوة بشكل منظم ومقسم</p></div></div>
+          <div class="screen-item"><span class="s-icon">📄</span><div><h4>تفاصيل الدليل</h4><p>محتوى إرشادي تفصيلي لكل خطوة من خطوات الحج</p></div></div>
+          <div class="screen-item"><span class="s-icon">🕐</span><div><h4>أوقات الصلاة</h4><p>أوقات الصلوات الخمس بناءً على الموقع الجغرافي</p></div></div>
+          <div class="screen-item"><span class="s-icon">🧭</span><div><h4>اتجاه القبلة</h4><p>بوصلة ذكية تُحدد اتجاه الكعبة في الوقت الفعلي</p></div></div>
+          <div class="screen-item"><span class="s-icon">📗</span><div><h4>القرآن الكريم</h4><p>قراءة وتصفح القرآن الكريم كاملاً</p></div></div>
+        </div>
+
+        <div class="section-divider">🛠️ الأدوات والمعلومات</div>
+        <div class="screens-list">
+          <div class="screen-item"><span class="s-icon">🏅</span><div><h4>الشهادة الرقمية</h4><p>توليد وتنزيل شهادة إتمام التدريب بكود QR</p></div></div>
+          <div class="screen-item"><span class="s-icon">🆘</span><div><h4>الدعم والمساعدة</h4><p>أرقام الطوارئ وقنوات التواصل والدعم الفني</p></div></div>
+          <div class="screen-item"><span class="s-icon">🎬</span><div><h4>قوائم التشغيل</h4><p>قوائم فيديو YouTube التعليمية والإرشادية</p></div></div>
+          <div class="screen-item"><span class="s-icon">📹</span><div><h4>الوسائط</h4><p>مشغل فيديو متكامل مع دعم التحكم الكامل</p></div></div>
+          <div class="screen-item"><span class="s-icon">💱</span><div><h4>تحويل العملات</h4><p>تحويل العملات في الوقت الفعلي مع دعم عملات متعددة</p></div></div>
+          <div class="screen-item"><span class="s-icon">ℹ️</span><div><h4>عن التطبيق</h4><p>معلومات التطبيق وفريق التطوير</p></div></div>
+          <div class="screen-item"><span class="s-icon">🔏</span><div><h4>سياسة الخصوصية</h4><p>سياسة الخصوصية وحماية بيانات المستخدم</p></div></div>
+          <div class="screen-item"><span class="s-icon">📜</span><div><h4>شروط الاستخدام</h4><p>شروط وأحكام استخدام التطبيق</p></div></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3 Features -->
+    <div id="features" class="section-card">
+      <div class="section-header gold">
+        <div class="s-icon-box">⭐</div>
+        <div>
+          <h2>الميزات الرئيسية</h2>
+          <p>وصف تفصيلي لكل ميزة في التطبيق وطريقة عملها</p>
+        </div>
+        <span class="section-num"> 3</span>
+      </div>
+      <div class="section-body">
+
+        <div class="sub-heading">🔐 منظومة المصادقة والحسابات</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">👤</span><h3>إنشاء الحساب والدخول</h3><p>تسجيل المستخدمين بالبريد الإلكتروني مع التحقق من رقم الهوية الوطنية السعودية. نظام رموز JWT آمن مع تحديث تلقائي للرموز.</p></div>
+          <div class="feature-card" style="--accent:#3b82f6"><span class="fc-icon">🔄</span><h3>إدارة الجلسة الآمنة</h3><p>تخزين الرموز بأمان في Keychain (iOS) وKeystore (Android) مع التحديث التلقائي وإلغاء الجلسة عند تسجيل الخروج.</p></div>
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">🗑️</span><h3>حذف الحساب</h3><p>إمكانية حذف الحساب بشكل كامل مع إلغاء تسجيل رمز الجهاز من نظام الإشعارات تلقائياً.</p></div>
+        </div>
+
+        <div class="sub-heading">☪️ الخدمات الدينية الإسلامية</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:var(--gold-dark)"><span class="fc-icon">🕐</span><h3>أوقات الصلاة الدقيقة</h3><p>حساب دقيق لأوقات الصلوات الخمس بناءً على الموقع الجغرافي الفعلي باستخدام مكتبة <strong>Adhan</strong> المعتمدة. يشمل تنبيهات الصلاة.</p></div>
+          <div class="feature-card" style="--accent:var(--green-light)"><span class="fc-icon">🧭</span><h3>بوصلة اتجاه القبلة</h3><p>بوصلة ذكية تحدد اتجاه الكعبة المشرفة (21.4225°N, 39.8262°E) في الوقت الفعلي مع خوارزمية تنعيم لقراءات مستقرة وعرض المسافة.</p></div>
+          <div class="feature-card" style="--accent:#6d28d9"><span class="fc-icon">📗</span><h3>القرآن الكريم الكامل</h3><p>مصحف رقمي كامل متكامل مع مكتبة <strong>quran_library</strong> يتيح قراءة وتصفح القرآن الكريم بشكل سلس.</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">📖</span><h3>دليل الحاج المرحلي</h3><p>إرشادات شاملة لمناسك الحج مقسمة إلى مراحل وخطوات واضحة مع محتوى تفصيلي لكل منسك.</p></div>
+        </div>
+
+        <div class="sub-heading">📋 نظام إدارة الشكاوى</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">📤</span><h3>رفع الشكاوى بالمرفقات</h3><p>نموذج متكامل لرفع الشكاوى مع دعم إرفاق الصور والملفات، وتصنيف الشكوى حسب النوع والفئة والحالة.</p></div>
+          <div class="feature-card" style="--accent:#f59e0b"><span class="fc-icon">📡</span><h3>تتبع حالة الشكوى</h3><p>متابعة حالة الشكوى في الوقت الفعلي عبر مراحل متعددة: مقدمة، قيد المعالجة، مُغلقة، مرفوضة.</p></div>
+          <div class="feature-card" style="--accent:#10b981"><span class="fc-icon">💾</span><h3>الوصول بدون إنترنت</h3><p>تخزين الشكاوى محلياً للوصول إليها بدون اتصال بالإنترنت مع مزامنة تلقائية عند عودة الاتصال.</p></div>
+        </div>
+
+        <div class="sub-heading">🎓 نظام التدريب والتقييم</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:#8b5cf6"><span class="fc-icon">📚</span><h3>التدريب المرحلي</h3><p>برنامج تدريبي منظم على مراحل مع تتبع التقدم لكل مرحلة. يدعم حالتي "نشط" و"مكتمل" مع أيقونات وصف لكل مرحلة.</p></div>
+          <div class="feature-card" style="--accent:#d97706"><span class="fc-icon">✅</span><h3>التقييمات التفاعلية</h3><p>تقييمات تفاعلية لكل مرحلة تدريبية مع إرسال النتائج وتتبع مستوى الإنجاز لكل حاج.</p></div>
+          <div class="feature-card" style="--accent:var(--gold-dark)"><span class="fc-icon">🏅</span><h3>شهادة الإتمام الرقمية</h3><p>توليد شهادة رقمية عند إتمام التدريب مضمّن بها رمز QR، مع إمكانية التنزيل والحفظ في معرض الصور.</p></div>
+        </div>
+
+        <div class="sub-heading">🔔 نظام الإشعارات الذكي</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">📲</span><h3>إشعارات Firebase (FCM)</h3><p>إشعارات فورية عبر Firebase Cloud Messaging تصل في جميع الحالات: واجهة أمامية، خلفية، وعند إغلاق التطبيق.</p></div>
+          <div class="feature-card" style="--accent:#3b82f6"><span class="fc-icon">🏠</span><h3>إشعارات محلية</h3><p>إشعارات محلية كبديل احتياطي مع دعم كامل لأنظمة iOS وAndroid وتخصيص النغمة والرمز.</p></div>
+          <div class="feature-card" style="--accent:#10b981"><span class="fc-icon">🔢</span><h3>عداد غير المقروء</h3><p>تتبع دقيق لعدد الإشعارات غير المقروءة مع تحديث تلقائي لرمز الشارة على أيقونة التطبيق.</p></div>
+        </div>
+
+        <div class="sub-heading">🎬 محتوى الوسائط المتعددة</div>
+        <div class="features-grid" style="margin-bottom:28px;">
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">▶️</span><h3>مشغل يوتيوب المدمج</h3><p>تشغيل فيديوهات YouTube مباشرة داخل التطبيق عبر قوائم تشغيل منظمة مع دعم ما يصل إلى 50 فيديو لكل قائمة.</p></div>
+          <div class="feature-card" style="--accent:#7c3aed"><span class="fc-icon">🎥</span><h3>مشغل فيديو متكامل</h3><p>مشغل فيديو احترافي بمكتبة <strong>Chewie</strong> مع تحكم كامل (تشغيل، إيقاف، ملء الشاشة، السرعة).</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">📋</span><h3>قوائم التشغيل المنظمة</h3><p>تنظيم الفيديوهات في قوائم تشغيل متعددة مع عرض مرئي للمصغرات والعناوين وعدد الفيديوهات.</p></div>
+        </div>
+
+        <div class="sub-heading">🛠️ الأدوات والخدمات المساعدة</div>
+        <div class="features-grid">
+          <div class="feature-card" style="--accent:#059669"><span class="fc-icon">💱</span><h3>محوّل العملات</h3><p>تحويل العملات في الوقت الفعلي بين عملات متعددة لمساعدة الحجاج على معرفة القيم المالية خلال الرحلة.</p></div>
+          <div class="feature-card" style="--accent:#dc2626"><span class="fc-icon">🆘</span><h3>الدعم والطوارئ</h3><p>وصول سريع لأرقام الطوارئ وقنوات الدعم الفني والمساعدة الميدانية مع إمكانية الاتصال المباشر.</p></div>
+          <div class="feature-card" style="--accent:#7c3aed"><span class="fc-icon">📡</span><h3>مراقبة الاتصال</h3><p>رصد حالة الاتصال بالإنترنت في الوقت الفعلي مع الاستجابة الذكية (عرض البيانات المخزنة أو تنبيه المستخدم).</p></div>
+          <div class="feature-card" style="--accent:#d97706"><span class="fc-icon">🔄</span><h3>التحديث التلقائي (OTA)</h3><p>تحديث التطبيق عبر الهواء بنظام <strong>Shorebird</strong> دون الحاجة لإعادة النشر في المتجر، مما يضمن سرعة إصلاح الأخطاء.</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">📤</span><h3>مشاركة المحتوى</h3><p>مشاركة الشهادات والمحتوى عبر تطبيقات المشاركة في النظام (واتساب، بريد إلكتروني، إلخ).</p></div>
+          <div class="feature-card" style="--accent:#16a34a"><span class="fc-icon">📍</span><h3>خدمات الموقع الجغرافي</h3><p>تحديد الموقع بدقة عالية لحسابات القبلة وأوقات الصلاة مع إدارة ذكية للصلاحيات وخيار الانتقال لإعدادات الجهاز.</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 4 Architecture -->
+    <div id="architecture" class="section-card">
+      <div class="section-header purple">
+        <div class="s-icon-box">🏗️</div>
+        <div>
+          <h2>البنية التقنية والمعمارية</h2>
+          <p>Clean Architecture مع BLoC Pattern وفصل واضح للطبقات</p>
+        </div>
+        <span class="section-num"> 4</span>
+      </div>
+      <div class="section-body">
+
+        <div class="callout callout-info">
+          <span class="c-icon">💡</span>
+          <p>
+            <strong>Clean Architecture — لماذا؟</strong>
+            يتبع التطبيق مبادئ Clean Architecture لفصل المسؤوليات بشكل واضح، مما يجعل اختبار كل طبقة مستقلاً، وإضافة ميزات جديدة أسرع، وصيانة الكود أسهل على المدى الطويل.
+          </p>
+        </div>
+
+        <div class="sub-heading">طبقات المعمارية لكل ميزة</div>
+
+        <div class="arch-layer l-presentation">
+          <div class="arch-layer-head"><span>📱</span> طبقة العرض (Presentation Layer)</div>
+          <div class="arch-layer-body">
+            <strong>المسؤولية:</strong> عرض البيانات للمستخدم والتعامل مع تفاعلاته<br>
+            <strong>المكونات:</strong> Screens (الشاشات) + Cubits (إدارة الحالة) + States (حالات الواجهة)<br>
+            <strong>مثال:</strong> <code>ComplaintsScreen</code> → <code>ComplaintsCubit</code> → <code>ComplaintsState</code>
+          </div>
+        </div>
+        <div class="arch-layer l-domain">
+          <div class="arch-layer-head"><span>⚙️</span> طبقة المجال (Domain Layer)</div>
+          <div class="arch-layer-body">
+            <strong>المسؤولية:</strong> منطق العمل الأساسي المستقل عن أي تقنية<br>
+            <strong>المكونات:</strong> Entities (النماذج) + Use Cases (حالات الاستخدام) + Repository Interfaces<br>
+            <strong>مثال:</strong> <code>ComplaintEntity</code> + <code>GetComplaintsUseCase</code> + <code>IComplaintsRepository</code>
+          </div>
+        </div>
+        <div class="arch-layer l-data">
+          <div class="arch-layer-head"><span>🗄️</span> طبقة البيانات (Data Layer)</div>
+          <div class="arch-layer-body">
+            <strong>المسؤولية:</strong> جلب البيانات من المصادر (API, Cache, Local)<br>
+            <strong>المكونات:</strong> Repository Implementations + Data Sources + DTOs<br>
+            <strong>مثال:</strong> <code>ComplaintsRepositoryImpl</code> → <code>ComplaintsApiDataSource</code> + <code>ComplaintsCacheDataSource</code>
+          </div>
+        </div>
+
+        <div class="sub-heading">إدارة الحالة — نمط BLoC/Cubit</div>
+        <div class="col-2" style="margin-bottom:24px;">
+          <div>
+            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;font-weight:600;">Cubits العامة (Global)</p>
+            <div class="timeline">
+              <div class="tl-item"><h4>LocalizationCubit</h4><p>إدارة لغة التطبيق والتبديل بين اللغات</p></div>
+              <div class="tl-item"><h4>MeCubit</h4><p>حالة المستخدم الحالي والمصادقة</p></div>
+              <div class="tl-item"><h4>NotificationsCubit</h4><p>إدارة الإشعارات وعداد غير المقروء</p></div>
+              <div class="tl-item"><h4>ThemeCubit</h4><p>إدارة مظهر التطبيق (فاتح/داكن)</p></div>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px;font-weight:600;">Cubits الميزات (Feature)</p>
+            <div class="timeline">
+              <div class="tl-item"><h4>LoginCubit</h4><p>عملية تسجيل الدخول</p></div>
+              <div class="tl-item"><h4>ComplaintsCubit</h4><p>قائمة وإنشاء الشكاوى</p></div>
+              <div class="tl-item"><h4>PrayerTimesCubit</h4><p>حساب وعرض أوقات الصلاة</p></div>
+              <div class="tl-item"><h4>QiblaCubit</h4><p>اتجاه القبلة والبوصلة</p></div>
+              <div class="tl-item"><h4>EvaluationCubit</h4><p>التقييمات التدريبية</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-heading">حقن التبعيات (GetIt)</div>
+        <div class="info-pills">
+          <div class="pill"><span class="dot"></span>core_module</div>
+          <div class="pill"><span class="dot"></span>auth_module</div>
+          <div class="pill"><span class="dot"></span>home_module</div>
+          <div class="pill"><span class="dot"></span>complaints_module</div>
+          <div class="pill"><span class="dot"></span>evaluations_module</div>
+          <div class="pill"><span class="dot"></span>training_module</div>
+          <div class="pill"><span class="dot"></span>qibla_module</div>
+          <div class="pill"><span class="dot"></span>notifications_module</div>
+          <div class="pill"><span class="dot"></span>media_module</div>
+          <div class="pill"><span class="dot"></span>public_module</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 5 Tech -->
+    <div id="tech" class="section-card">
+      <div class="section-header blue">
+        <div class="s-icon-box">⚙️</div>
+        <div>
+          <h2>التقنيات والمكتبات المستخدمة</h2>
+          <p>30+ مكتبة خارجية تُشكّل بنية التطبيق</p>
+        </div>
+        <span class="section-num"> 5</span>
+      </div>
+      <div class="section-body">
+
+        <div class="col-2" style="margin-bottom:20px;">
+          <table class="info-table">
+            <tr><th colspan="3">المكتبات الأساسية</th></tr>
+            <tr><td><strong>إدارة الحالة</strong></td><td>flutter_bloc ^9.1.1</td><td><span class="badge badge-green">أساسي</span></td></tr>
+            <tr><td><strong>الشبكة</strong></td><td>dio ^5.9.2</td><td><span class="badge badge-blue">شبكة</span></td></tr>
+            <tr><td><strong>التوجيه</strong></td><td>go_router ^17.2.0</td><td><span class="badge badge-green">أساسي</span></td></tr>
+            <tr><td><strong>حقن التبعيات</strong></td><td>get_it ^9.2.1</td><td><span class="badge badge-green">أساسي</span></td></tr>
+            <tr><td><strong>التخزين الآمن</strong></td><td>flutter_secure_storage</td><td><span class="badge badge-red">أمان</span></td></tr>
+            <tr><td><strong>التفضيلات</strong></td><td>shared_preferences</td><td><span class="badge badge-blue">تخزين</span></td></tr>
+            <tr><td><strong>البرمجة الوظيفية</strong></td><td>dartz ^0.10.1</td><td><span class="badge badge-purple">منطق</span></td></tr>
+            <tr><td><strong>المساواة</strong></td><td>equatable ^2.0.8</td><td><span class="badge badge-green">أساسي</span></td></tr>
+          </table>
+          <table class="info-table">
+            <tr><th colspan="3">Firebase والإشعارات</th></tr>
+            <tr><td><strong>Firebase Core</strong></td><td>^4.6.0</td><td><span class="badge badge-gold">Firebase</span></td></tr>
+            <tr><td><strong>FCM</strong></td><td>firebase_messaging ^16.1.3</td><td><span class="badge badge-gold">Firebase</span></td></tr>
+            <tr><td><strong>إشعارات محلية</strong></td><td>flutter_local_notifications</td><td><span class="badge badge-blue">إشعارات</span></td></tr>
+            <tr><td><strong>الصلاحيات</strong></td><td>permission_handler ^12.0.1</td><td><span class="badge badge-red">أمان</span></td></tr>
+            <tr><th colspan="3">الموقع والبوصلة</th></tr>
+            <tr><td><strong>GPS</strong></td><td>geolocator ^14.0.2</td><td><span class="badge badge-green">موقع</span></td></tr>
+            <tr><td><strong>ترميز جغرافي</strong></td><td>geocoding ^4.0.0</td><td><span class="badge badge-green">موقع</span></td></tr>
+            <tr><td><strong>البوصلة</strong></td><td>flutter_compass ^0.8.0</td><td><span class="badge badge-green">موقع</span></td></tr>
+          </table>
+        </div>
+
+        <div class="col-2" style="margin-bottom:20px;">
+          <table class="info-table">
+            <tr><th colspan="3">المكتبات الإسلامية</th></tr>
+            <tr><td><strong>أوقات الأذان</strong></td><td>adhan ^2.0.0+1</td><td><span class="badge badge-gold">إسلامي</span></td></tr>
+            <tr><td><strong>القرآن الكريم</strong></td><td>quran_library ^4.0.2</td><td><span class="badge badge-gold">إسلامي</span></td></tr>
+            <tr><td><strong>التقويم الهجري</strong></td><td>hijri_date ^1.1.0</td><td><span class="badge badge-gold">إسلامي</span></td></tr>
+            <tr><th colspan="3">الوسائط</th></tr>
+            <tr><td><strong>مشغل فيديو</strong></td><td>video_player ^2.11.1</td><td><span class="badge badge-purple">وسائط</span></td></tr>
+            <tr><td><strong>تحكم الفيديو</strong></td><td>chewie ^1.13.0</td><td><span class="badge badge-purple">وسائط</span></td></tr>
+            <tr><td><strong>يوتيوب</strong></td><td>youtube_player_flutter</td><td><span class="badge badge-red">وسائط</span></td></tr>
+            <tr><td><strong>الصور المؤقتة</strong></td><td>cached_network_image</td><td><span class="badge badge-blue">أداء</span></td></tr>
+          </table>
+          <table class="info-table">
+            <tr><th colspan="3">الأدوات والواجهة</th></tr>
+            <tr><td><strong>أيقونات Lucide</strong></td><td>lucide_icons_flutter</td><td><span class="badge badge-blue">واجهة</span></td></tr>
+            <tr><td><strong>أيقونات FA</strong></td><td>font_awesome_flutter</td><td><span class="badge badge-blue">واجهة</span></td></tr>
+            <tr><td><strong>تأثير Shimmer</strong></td><td>shimmer ^3.0.0</td><td><span class="badge badge-blue">واجهة</span></td></tr>
+            <tr><td><strong>رمز QR</strong></td><td>qr ^3.0.2</td><td><span class="badge badge-green">أدوات</span></td></tr>
+            <tr><td><strong>اختيار الصورة</strong></td><td>image_picker ^1.2.1</td><td><span class="badge badge-green">أدوات</span></td></tr>
+            <tr><td><strong>حفظ للمعرض</strong></td><td>saver_gallery ^4.1.1</td><td><span class="badge badge-green">أدوات</span></td></tr>
+            <tr><td><strong>مشاركة</strong></td><td>share_plus ^12.0.2</td><td><span class="badge badge-green">أدوات</span></td></tr>
+            <tr><td><strong>الروابط</strong></td><td>url_launcher ^6.3.2</td><td><span class="badge badge-green">أدوات</span></td></tr>
+          </table>
+        </div>
+
+        <div class="sub-heading">طبقة الشبكة (Network Layer)</div>
+        <div class="col-3">
+          <div class="callout callout-info" style="flex-direction:column;gap:6px;">
+            <strong style="font-size:.84rem;color:#1e40af;">🔐 Auth Interceptor</strong>
+            <p style="font-size:.79rem;">يحقن رمز JWT في كل طلب ويجدده تلقائياً عند انتهاء الصلاحية.</p>
+          </div>
+          <div class="callout callout-warn" style="flex-direction:column;gap:6px;">
+            <strong style="font-size:.84rem;color:#92400e;">🔄 Retry Interceptor</strong>
+            <p style="font-size:.79rem;">إعادة المحاولة تلقائياً عند انقطاع الاتصال بالشبكة.</p>
+          </div>
+          <div class="callout callout-success" style="flex-direction:column;gap:6px;">
+            <strong style="font-size:.84rem;color:#166534;">📋 Log Interceptor</strong>
+            <p style="font-size:.79rem;">تسجيل الطلبات والاستجابات بصيغة JSON منسقة (في وضع التطوير فقط).</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 6 Services -->
+    <div id="services" class="section-card">
+      <div class="section-header dark">
+        <div class="s-icon-box">🔧</div>
+        <div>
+          <h2>الخدمات الأساسية (Core Services)</h2>
+          <p>14 خدمة متخصصة تُشكّل العمود الفقري للتطبيق</p>
+        </div>
+        <span class="section-num"> 6</span>
+      </div>
+      <div class="section-body">
+        <div class="features-grid">
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">🔔</span><h3>NotificationService</h3><p>إدارة شاملة لـ FCM والإشعارات المحلية، تسجيل رموز الأجهزة وإلغاؤها، ومعالجة النقر على الإشعارات.</p></div>
+          <div class="feature-card" style="--accent:#10b981"><span class="fc-icon">📍</span><h3>LocationService</h3><p>تحديد الموقع الجغرافي بدقة عالية مع الترميز الجغرافي العكسي وإرشاد المستخدم لإعدادات الجهاز.</p></div>
+          <div class="feature-card" style="--accent:#f59e0b"><span class="fc-icon">🔑</span><h3>PermissionService</h3><p>إدارة طلبات الصلاحيات (الموقع، الكاميرا، المعرض، الإشعارات) مع معالجة الرفض بشكل لطيف.</p></div>
+          <div class="feature-card" style="--accent:#7c3aed"><span class="fc-icon">🔒</span><h3>TokenStorageService</h3><p>تخزين رموز JWT بأمان في Keychain (iOS) وKeystore (Android) مع تشفير كامل.</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">📱</span><h3>DeviceInfoService</h3><p>جلب معلومات الجهاز (نوع، نظام تشغيل، إصدار) لتسجيل رموز الإشعارات وتشخيص المشكلات.</p></div>
+          <div class="feature-card" style="--accent:#dc2626"><span class="fc-icon">📡</span><h3>ConnectivityService</h3><p>رصد حالة الاتصال بالإنترنت في الوقت الفعلي وإبلاغ التطبيق بالتغييرات.</p></div>
+          <div class="feature-card" style="--accent:#d97706"><span class="fc-icon">🖼️</span><h3>ImagePickerService</h3><p>اختيار الصور من المعرض أو التقاطها من الكاميرا لإرفاقها بالشكاوى.</p></div>
+          <div class="feature-card" style="--accent:#059669"><span class="fc-icon">📤</span><h3>ShareService</h3><p>مشاركة المحتوى (الشهادات، الروابط) عبر نافذة المشاركة الأصلية للنظام.</p></div>
+          <div class="feature-card" style="--accent:#2563eb"><span class="fc-icon">🔗</span><h3>UrlLauncherService</h3><p>فتح الروابط الخارجية والبريد الإلكتروني وأرقام الهاتف من داخل التطبيق.</p></div>
+          <div class="feature-card" style="--accent:#9333ea"><span class="fc-icon">📷</span><h3>CaptureWidgetService</h3><p>التقاط لقطة شاشة لأي مكوّن في التطبيق وتحويله إلى صورة (لتوليد الشهادات).</p></div>
+          <div class="feature-card" style="--accent:#16a34a"><span class="fc-icon">💾</span><h3>GallerySaverService</h3><p>حفظ الصور المولّدة (الشهادات) في معرض صور الجهاز بشكل دائم.</p></div>
+          <div class="feature-card" style="--accent:#0369a1"><span class="fc-icon">⬇️</span><h3>DownloadService</h3><p>تنزيل الملفات من الإنترنت وحفظها محلياً في مسار التخزين المناسب.</p></div>
+          <div class="feature-card" style="--accent:#b45309"><span class="fc-icon">📲</span><h3>QrCodeService</h3><p>توليد رموز QR ديناميكياً وتضمينها في الشهادات ومحتويات أخرى.</p></div>
+          <div class="feature-card" style="--accent:#6d28d9"><span class="fc-icon">⌨️</span><h3>KeyboardResyncService</h3><p>إدارة تركيز لوحة المفاتيح ومنع مشاكل التخطيط الناتجة عن ظهورها واختفائها.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 UI -->
+    <div id="ui" class="section-card">
+      <div class="section-header red">
+        <div class="s-icon-box">🎨</div>
+        <div>
+          <h2>نظام الواجهة والهوية البصرية</h2>
+          <p>Material Design 3 مع هوية بصرية عربية أصيلة</p>
+        </div>
+        <span class="section-num"> 7</span>
+      </div>
+      <div class="section-body">
+
+        <div class="sub-heading">لوحة الألوان</div>
+        <div class="color-palette">
+          <div class="color-swatch"><div class="swatch-box" style="background:#00594F;"></div><div class="swatch-label">أخضر داكن<br>#00594F</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#016D5D;"></div><div class="swatch-label">أخضر متوسط<br>#016D5D</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#289E92;"></div><div class="swatch-label">أخضر فاتح<br>#289E92</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#AD9E6E;"></div><div class="swatch-label">ذهبي داكن<br>#AD9E6E</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#D9C89E;"></div><div class="swatch-label">ذهبي متوسط<br>#D9C89E</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#E4DDD3;border:1px solid #ccc;"></div><div class="swatch-label">ذهبي فاتح<br>#E4DDD3</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#420023;"></div><div class="swatch-label">أحمر داكن<br>#420023</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#672146;"></div><div class="swatch-label">أحمر متوسط<br>#672146</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#7A2631;"></div><div class="swatch-label">أحمر فاتح<br>#7A2631</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#FFFFFF;border:1px solid #ddd;"></div><div class="swatch-label">أبيض<br>#FFFFFF</div></div>
+          <div class="color-swatch"><div class="swatch-box" style="background:#1A202C;"></div><div class="swatch-label">أسود<br>#1A202C</div></div>
+        </div>
+
+        <div class="sub-heading">الخطوط المستخدمة</div>
+        <div class="col-2" style="margin-bottom:24px;">
+          <div class="font-box" style="background:var(--gold-pale);border-color:#e8d8b0;">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--green-dark);margin-bottom:8px;">خط القمرة</div>
+            <div style="font-size:.84rem;color:var(--text-muted);margin-bottom:10px;"><strong>itfQomra</strong> — الخط الأساسي العربي</div>
+            <div style="font-size:.8rem;color:var(--gray-800);line-height:2;">
+              <span style="font-weight:300">رفيع (300) —</span>
+              <span style="font-weight:400"> عادي (400) —</span>
+              <span style="font-weight:700"> عريض (700)</span>
+            </div>
+          </div>
+          <div class="font-box" style="background:var(--green-pale);border-color:#c3e4df;">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--green-dark);margin-bottom:8px;">خط القاهرة</div>
+            <div style="font-size:.84rem;color:var(--text-muted);margin-bottom:10px;"><strong>Cairo</strong> — الخط الثانوي</div>
+            <div style="font-size:.8rem;color:var(--gray-800);line-height:2;">
+              خفيف (200) — رفيع (300) — عادي (400) — نصف عريض (600) — عريض (700) — أسود (900)
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-heading">المكونات المشتركة (Shared Widgets)</div>
+        <div class="features-grid" style="margin-bottom:24px;">
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">📝</span><h3>CustomText</h3><p>نص مخصص يدعم الأوزان والأحجام المختلفة مع خط التطبيق الأساسي.</p></div>
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">🔘</span><h3>CustomButton</h3><p>أزرار بثلاثة أنماط: مرتفع (Elevated)، محدود (Outlined)، نص (Text) مع تناسق كامل.</p></div>
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">📦</span><h3>CustomContainer</h3><p>حاوية عامة قابلة للتخصيص بالألوان والظل وزوايا الحواف.</p></div>
+          <div class="feature-card" style="--accent:var(--gold-dark)"><span class="fc-icon">🦸</span><h3>CustomHeroSection</h3><p>قسم الغلاف الجميل أعلى الشاشات مع الخلفية الخضراء والمحتوى.</p></div>
+          <div class="feature-card" style="--accent:var(--gold-dark)"><span class="fc-icon">🌐</span><h3>CustomNetworkImage</h3><p>صورة شبكية مع التخزين المؤقت التلقائي وصورة بديلة عند الخطأ.</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">✨</span><h3>ShimmerBox</h3><p>تأثير تحميل لامع (Shimmer) يظهر أثناء جلب البيانات لتجربة مستخدم أفضل.</p></div>
+          <div class="feature-card" style="--accent:#7c3aed"><span class="fc-icon">🎬</span><h3>VideoPlayerView</h3><p>مشغل فيديو جاهز للاستخدام مع تحكمات Chewie الكاملة.</p></div>
+          <div class="feature-card" style="--accent:#d97706"><span class="fc-icon">📊</span><h3>InfoDisplayTile</h3><p>بطاقة عرض معلومات بتصميم موحد يستخدم في مختلف الشاشات.</p></div>
+          <div class="feature-card" style="--accent:#ef4444"><span class="fc-icon">⚠️</span><h3>ImportantNoteBox</h3><p>صندوق تنبيه مميز لعرض المعلومات المهمة والتنبيهات.</p></div>
+          <div class="feature-card" style="--accent:#059669"><span class="fc-icon">🔢</span><h3>NumberedStepsList</h3><p>قائمة خطوات مرقمة لعرض التعليمات التسلسلية بشكل واضح.</p></div>
+          <div class="feature-card" style="--accent:#2563eb"><span class="fc-icon">🔔</span><h3>CircularIconBadge</h3><p>أيقونة دائرية مع شارة عدد (للإشعارات وغيرها).</p></div>
+          <div class="feature-card" style="--accent:#6d28d9"><span class="fc-icon">🍞</span><h3>CustomSnackbar</h3><p>إشعار منبثق أسفل الشاشة بتصميم موحد لرسائل النجاح والخطأ.</p></div>
+        </div>
+
+        <div class="sub-heading">انتقالات الصفحات</div>
+        <div class="info-pills">
+          <div class="pill"><span class="dot" style="background:#ef4444;"></span>من اليمين إلى اليسار (RTL)</div>
+          <div class="pill"><span class="dot" style="background:#3b82f6;"></span>من اليسار إلى اليمين (LTR)</div>
+          <div class="pill"><span class="dot" style="background:#10b981;"></span>من الأعلى للأسفل</div>
+          <div class="pill"><span class="dot" style="background:#f59e0b;"></span>من الأسفل للأعلى</div>
+          <div class="pill"><span class="dot"></span>مدة 320ms — 450ms</div>
+          <div class="pill"><span class="dot"></span>تلاشي + انزلاق مدمج</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 8 Localization -->
+    <div id="localization" class="section-card">
+      <div class="section-header teal">
+        <div class="s-icon-box">🌍</div>
+        <div>
+          <h2>دعم اللغات والتعريب</h2>
+          <p>4 لغات مدعومة مع نظام ترجمة ذكي ودعم RTL كامل</p>
+        </div>
+        <span class="section-num"> 8</span>
+      </div>
+      <div class="section-body">
+
+        <div class="col-4" style="margin-bottom:28px;">
+          <div class="lang-card" style="background:linear-gradient(135deg,var(--green-dark),var(--green-mid));">
+            <div class="flag">🇸🇦</div>
+            <div class="lang-name" style="color:var(--gold-mid);">العربية</div>
+            <div class="lang-sub">اللغة الافتراضية — RTL</div>
+            <div class="lang-size">71KB من الترجمات</div>
+          </div>
+          <div class="lang-card" style="background:linear-gradient(135deg,#1a3a6a,#2c5fbf);">
+            <div class="flag">🇬🇧</div>
+            <div class="lang-name" style="color:#93c5fd;">English</div>
+            <div class="lang-sub">الإنجليزية — LTR</div>
+            <div class="lang-size">59KB من الترجمات</div>
+          </div>
+          <div class="lang-card" style="background:linear-gradient(135deg,#7c0000,#c53030);">
+            <div class="flag">🇹🇷</div>
+            <div class="lang-name" style="color:#fca5a5;">Türkçe</div>
+            <div class="lang-sub">التركية — LTR</div>
+            <div class="lang-size">60KB من الترجمات</div>
+          </div>
+          <div class="lang-card" style="background:linear-gradient(135deg,#3b0000,#7a1500);">
+            <div class="flag">🇩🇪</div>
+            <div class="lang-name" style="color:#fcd34d;">Deutsch</div>
+            <div class="lang-sub">الألمانية — LTR</div>
+            <div class="lang-size">63KB من الترجمات</div>
+          </div>
+        </div>
+
+        <div class="sub-heading">مميزات نظام الترجمة</div>
+        <div class="features-grid">
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">🔑</span><h3>مفاتيح متداخلة</h3><p>نظام مفاتيح منطقي من نقطة (dot-notation): <code>auth.login.title</code> لسهولة التنظيم.</p></div>
+          <div class="feature-card" style="--accent:var(--green-mid)"><span class="fc-icon">🔄</span><h3>تبديل اللغة الفوري</h3><p>يمكن تغيير لغة التطبيق فورياً بدون إعادة تشغيله عبر LocalizationCubit.</p></div>
+          <div class="feature-card" style="--accent:var(--gold-dark)"><span class="fc-icon">📝</span><h3>قيم ديناميكية</h3><p>دعم إدراج المتغيرات في الترجمات: <code>"مرحباً {name}"</code> مع استبدال تلقائي.</p></div>
+          <div class="feature-card" style="--accent:#0891b2"><span class="fc-icon">↔️</span><h3>RTL/LTR تلقائي</h3><p>يتبدل اتجاه التطبيق تلقائياً حسب اللغة المختارة (يمين لليسار للعربية).</p></div>
+          <div class="feature-card" style="--accent:#7c3aed"><span class="fc-icon">💾</span><h3>حفظ التفضيل</h3><p>يتذكر التطبيق لغة المستخدم المختارة ويطبقها عند كل إعادة تشغيل.</p></div>
+          <div class="feature-card" style="--accent:#059669"><span class="fc-icon">⚡</span><h3>امتداد .tr()</h3><p>طريقة مختصرة وعملية لإضافة الترجمات: <code>"auth.login.title".tr(context)</code></p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 9 Unique -->
+    <div id="unique" class="section-card">
+      <div class="section-header gold">
+        <div class="s-icon-box">💎</div>
+        <div>
+          <h2>الميزات الفريدة والابتكارية</h2>
+          <p>ما يميز تطبيق بوابة الحاج عن غيره</p>
+        </div>
+        <span class="section-num"> 9</span>
+      </div>
+      <div class="section-body">
+        <div class="col-2">
+          <div class="unique-card" style="background:linear-gradient(135deg,var(--green-pale),var(--bg-card));border-color:#c3e4df;">
+            <div class="uc-icon">🧭</div>
+            <h3>بوصلة القبلة الذكية</h3>
+            <p>خوارزمية متطورة تستخدم حساب المسافة Haversine لتحديد اتجاه الكعبة بدقة عالية مع تنعيم القراءة باستخدام خوارزمية Low-Pass Filter (alpha=0.3) لمنع الاهتزاز، ومعالجة ذكية لحدود 0/360 درجة.</p>
+          </div>
+          <div class="unique-card" style="background:linear-gradient(135deg,var(--gold-pale),var(--bg-card));border-color:#e8d8b0;">
+            <div class="uc-icon">📴</div>
+            <h3>العمل بدون إنترنت (Offline-First)</h3>
+            <p>تصميم يُقدّم الاتصال المنقطع كحالة طبيعية: الشكاوى مخزنة محلياً، بيانات الصلاة محفوظة في ملفات JSON، وعداد الصلاة يستمر بدون شبكة. المزامنة تلقائية عند عودة الاتصال.</p>
+          </div>
+          <div class="unique-card" style="background:linear-gradient(135deg,#f0f4ff,var(--bg-card));border-color:#c3cfe8;">
+            <div class="uc-icon">🏅</div>
+            <h3>الشهادة الرقمية بـ QR</h3>
+            <p>نظام ذكي يلتقط المكوّن كصورة عالية الدقة مع تضمين رمز QR يحتوي على بيانات الحاج والشهادة، مع إمكانية حفظها في المعرض أو مشاركتها مباشرة.</p>
+          </div>
+          <div class="unique-card" style="background:linear-gradient(135deg,#fff5f5,var(--bg-card));border-color:#fecaca;">
+            <div class="uc-icon">🔄</div>
+            <h3>التحديث الفوري (OTA)</h3>
+            <p>تقنية Shorebird تتيح دفع تحديثات كود Dart مباشرة للمستخدمين دون المرور بمراجعة المتجر، مما يعني إصلاح الأخطاء الحرجة في ساعات لا أيام.</p>
+          </div>
+          <div class="unique-card" style="background:linear-gradient(135deg,#f5f0ff,var(--bg-card));border-color:#ddd6fe;">
+            <div class="uc-icon">🛡️</div>
+            <h3>نمط SafeCubit</h3>
+            <p>تغليف مخصص لـ BLoC Cubit يمنع إصدار الحالات بعد إغلاق الـ Cubit، مع معالجة مركزية للأخطاء تضمن استقرار التطبيق وعدم تسريب الموارد.</p>
+          </div>
+          <div class="unique-card" style="background:linear-gradient(135deg,#f0fdf4,var(--bg-card));border-color:#bbf7d0;">
+            <div class="uc-icon">🌐</div>
+            <h3>واجهة عربية أولاً</h3>
+            <p>التطبيق مصمم من البداية للقراء العرب: عرض البسملة ﷽ في رأس التطبيق، خطوط عربية متخصصة، واتجاه RTL افتراضي، مع دعم كامل لـ 3 لغات أخرى.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 Stats -->
+    <div id="stats" class="section-card">
+      <div class="section-header green">
+        <div class="s-icon-box">📊</div>
+        <div>
+          <h2>ملخص إحصائي للمشروع</h2>
+          <p>أرقام تعكس حجم ونضج التطبيق</p>
+        </div>
+        <span class="section-num"> 10</span>
+      </div>
+      <div class="section-body">
+        <div class="stats-grid" style="margin-bottom:28px;">
+          <div class="stat-box"><span class="num">379+</span><span class="lbl">ملف Dart</span></div>
+          <div class="stat-box"><span class="num">24</span><span class="lbl">شاشة تفاعلية</span></div>
+          <div class="stat-box"><span class="num">23</span><span class="lbl">وحدة مستقلة</span></div>
+          <div class="stat-box"><span class="num">19+</span><span class="lbl">Cubit</span></div>
+          <div class="stat-box"><span class="num">21+</span><span class="lbl">State Class</span></div>
+          <div class="stat-box"><span class="num">25+</span><span class="lbl">ودجت مشترك</span></div>
+          <div class="stat-box"><span class="num">14</span><span class="lbl">خدمة متخصصة</span></div>
+          <div class="stat-box"><span class="num">4</span><span class="lbl">لغات مدعومة</span></div>
+          <div class="stat-box"><span class="num">30+</span><span class="lbl">مكتبة خارجية</span></div>
+          <div class="stat-box"><span class="num">10</span><span class="lbl">وحدات DI</span></div>
+          <div class="stat-box"><span class="num">30+</span><span class="lbl">مسار تنقل</span></div>
+          <div class="stat-box"><span class="num">15+</span><span class="lbl">Repository</span></div>
+        </div>
+        <div class="callout callout-success">
+          <span class="c-icon">🏆</span>
+          <p>
+            <strong>تطبيق احترافي على مستوى المؤسسات</strong>
+            بوابة الحاج ليس مجرد تطبيق عادي — إنه منظومة رقمية متكاملة تخدم الحجاج في أهم رحلة في حياتهم. يجمع بين الخدمات الدينية الأصيلة (القبلة، الأذان، القرآن) وإدارة الأعمال (الشكاوى، التقييمات، الشهادات) في بنية برمجية احترافية تضمن الاستقرار والتوسع المستقبلي.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Back to Top -->
+<button id="back-to-top" title="العودة للأعلى">↑</button>
+
+<!-- Footer -->
+<footer class="page-footer">
+  <div class="arabic-divider" style="color:var(--gold-mid);margin-bottom:14px;">✦ ✦ ✦</div>
+  <p><strong>بوابة الحاج</strong> — توثيق التطبيق الشامل</p>
+  <p style="margin-top:6px;">الإصدار 1.0.0 (Build 6) &nbsp;|&nbsp; Flutter ^3.11.4 &nbsp;|&nbsp; Dart &nbsp;|&nbsp; Clean Architecture</p>
+  <p style="margin-top:6px;opacity:.5;font-size:.74rem;">تم إنشاء هذا التوثيق بتاريخ 4 مايو 2026</p>
+  <div class="arabic-divider" style="color:var(--gold-dark);margin-top:14px;font-size:1rem;">﷽</div>
+</footer>
+
+<script>
+  // ── Progress Bar ──
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${window.scrollY / total})`;
+  }, { passive: true });
+
+  // ── Back to Top ──
+  const btt = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    btt.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ── Dark Mode ──
+  const themeBtn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme');
+  if (saved) { document.documentElement.setAttribute('data-theme', saved); themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙'; }
+  themeBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    localStorage.setItem('theme', next);
+  });
+
+  // ── Hamburger ──
+  const ham = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  ham.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!sidebar.contains(e.target) && e.target !== ham) sidebar.classList.remove('open');
+  });
+
+  // ── Scroll Animations ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.section-card').forEach(c => observer.observe(c));
+
+  // ── Active TOC ──
+  const sections = document.querySelectorAll('.section-card[id]');
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const allLinks = [...tocLinks, ...navLinks];
+
+  const secObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        allLinks.forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        document.querySelectorAll(`[href="#${id}"]`).forEach(l => l.classList.add('active'));
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => secObserver.observe(s));
+</script>
+</body>
+</html>
